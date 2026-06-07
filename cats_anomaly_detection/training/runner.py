@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import logging
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -26,8 +25,6 @@ from cats_anomaly_detection.utils.reproducibility import seed_everything
 
 """Training orchestration: setup, execution, logging, and visualization."""
 
-LOGGER = logging.getLogger(__name__)
-
 
 def is_mlflow_reachable(tracking_uri: str) -> bool:
     """Check if MLflow server can be reached."""
@@ -44,6 +41,28 @@ def is_mlflow_reachable(tracking_uri: str) -> bool:
         return False
 
 
+def create_logger(cfg: DictConfig) -> MLFlowLogger | CSVLogger:
+    """Create MLflow logger when possible, otherwise use CSV logger."""
+    tracking_uri = str(cfg.logging.tracking_uri)
+    if is_mlflow_reachable(tracking_uri):
+        mlflow_logger = MLFlowLogger(
+            experiment_name=str(cfg.logging.experiment_name),
+            tracking_uri=tracking_uri,
+            run_name=str(cfg.logging.run_name),
+            save_dir=str(cfg.logging.save_dir),
+            log_model=False,
+        )
+        try:
+            # Force an early connection so trainer setup does not fail later.
+            _ = mlflow_logger.experiment
+            return mlflow_logger
+        except Exception as exc:
+            print(f"MLflow logger could not connect ({exc}). Falling back to CSVLogger.")
+
+    print("MLflow server is not reachable, falling back to CSVLogger.")
+    return CSVLogger(save_dir="logs", name="fallback")
+
+
 def run_training(cfg: DictConfig) -> None:
     """Run training, test, and save plots."""
     # Set random seeds for reproducibility.
@@ -54,19 +73,8 @@ def run_training(cfg: DictConfig) -> None:
     model = AnomalyLightningModule(cfg)
 
     # Determine logging backend: MLflow if reachable, else fallback to CSV.
-    logger: MLFlowLogger | CSVLogger
-    use_mlflow = is_mlflow_reachable(str(cfg.logging.tracking_uri))
-    if use_mlflow:
-        logger = MLFlowLogger(
-            experiment_name=str(cfg.logging.experiment_name),
-            tracking_uri=str(cfg.logging.tracking_uri),
-            run_name=str(cfg.logging.run_name),
-            save_dir=str(cfg.logging.save_dir),
-            log_model=False,
-        )
-    else:
-        LOGGER.warning("MLflow server is not reachable, falling back to CSVLogger.")
-        logger = CSVLogger(save_dir="logs", name="fallback")
+    logger = create_logger(cfg)
+    use_mlflow = isinstance(logger, MLFlowLogger)
 
     # Setup callbacks: track metrics and save best checkpoint.
     metric_history = MetricHistoryCallback()

@@ -1,0 +1,7 @@
+[core]
+    no_scm = false
+    remote = data_remote
+['remote "data_remote"']
+    url = gdrive://1dm9soWz_LEA8Ke7FqbjpqbPnXxRaucmf
+['remote "models_remote"']
+    url = gdrive://1bTmpjlLz9cqhU1J5kEAByPhAJc_YETJ_

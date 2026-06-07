@@ -1,0 +1,5 @@
+tracking_uri: http://127.0.0.1:8080
+experiment_name: cats_anomaly_detection
+run_name: tcn_transformer_autoencoder
+save_dir: mlruns
+plot_dir: plots

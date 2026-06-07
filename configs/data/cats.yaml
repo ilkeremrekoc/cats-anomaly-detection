@@ -1,0 +1,10 @@
+dataset_name: cats
+raw_data_path: data/raw/cats_features.parquet
+processed_dir: data/processed
+window_size: 48
+stride: 4
+train_ratio: 0.70
+val_ratio: 0.10
+batch_size: 128
+num_workers: 0
+download_url: https://zenodo.org/records/8338435/files/data.parquet?download=1

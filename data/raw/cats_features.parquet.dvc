@@ -1,0 +1,5 @@
+outs:
+- md5: 824309369c26902aa520e4b5209977f7
+  size: 554563684
+  hash: md5
+  path: cats_features.parquet

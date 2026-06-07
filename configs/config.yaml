@@ -1,0 +1,9 @@
+defaults:
+  - data: cats
+  - model: autoencoder
+  - training: trainer
+  - logging: mlflow
+  - _self_
+
+seed: 42
+project_name: cats-anomaly-detection

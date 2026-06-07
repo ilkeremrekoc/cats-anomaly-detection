@@ -1,0 +1,16 @@
+stages:
+  train:
+    cmd: uv run cats-train train
+    deps:
+      - cats_anomaly_detection
+      - configs
+    outs:
+      - plots
+      - models
+  infer:
+    cmd: uv run cats-train infer
+    deps:
+      - cats_anomaly_detection
+      - configs
+    outs:
+      - outputs

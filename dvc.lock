@@ -1,0 +1,45 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: uv run cats-train train
+    deps:
+    - path: cats_anomaly_detection
+      hash: md5
+      md5: 4c91c26da62aeab96c97792475fbe5af.dir
+      size: 37015
+      nfiles: 17
+    - path: configs
+      hash: md5
+      md5: 004c2c92d9268f995dc9719f9bc7d93a.dir
+      size: 802
+      nfiles: 5
+    outs:
+    - path: models
+      hash: md5
+      md5: c3101a5782e69809884b4cead5a73d6a.dir
+      size: 2133389
+      nfiles: 1
+    - path: plots
+      hash: md5
+      md5: d97ddf934cb43faca8438f4442f24782.dir
+      size: 125866
+      nfiles: 4
+  infer:
+    cmd: uv run cats-train infer
+    deps:
+    - path: cats_anomaly_detection
+      hash: md5
+      md5: 4c91c26da62aeab96c97792475fbe5af.dir
+      size: 37015
+      nfiles: 17
+    - path: configs
+      hash: md5
+      md5: 004c2c92d9268f995dc9719f9bc7d93a.dir
+      size: 802
+      nfiles: 5
+    outs:
+    - path: outputs
+      hash: md5
+      md5: 037baa08c1531cf11f4bb748c7316cab.dir
+      size: 3000375
+      nfiles: 3

@@ -1,0 +1,7 @@
+input_dim: 17
+hidden_dim: 64
+tcn_levels: 4
+tcn_kernel_size: 3
+transformer_heads: 4
+transformer_layers: 2
+dropout: 0.1

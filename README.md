@@ -143,4 +143,6 @@ uv run cats-train train
 - Before inference, make sure a checkpoint exists in `models/` (either run training or pull model artifacts from `models_remote`).
 - The first run can take longer because data download/preprocessing/cache may happen.
 - Inference saves arrays and metrics to `outputs/`.
-- When MLflow is available, the git commit hash is logged.
+- When MLflow is available, the git commit hash is logged for reproducibility.
+- Google Cloud API OAuth credentials for DVC remote access should be stored in `.dvc/config.local` only (do not commit secrets in `.dvc/config`).
+- Set `gdrive_client_id` and `gdrive_client_secret` for each remote (`data_remote` and `models_remote`) in `.dvc/config.local`; you can use the same credential pair for both remotes.

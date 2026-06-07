@@ -14,9 +14,10 @@ def try_dvc_pull(target_path: Path) -> bool:
             check=True,
             capture_output=True,
             text=True,
+            timeout=30,
         )
         return True
-    except (subprocess.CalledProcessError, FileNotFoundError):
+    except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired):
         return False
 
 
